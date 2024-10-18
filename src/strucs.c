@@ -24,8 +24,6 @@ void printDetails(Customer *cust);
 void searchCustomer(char *name);
 void displayMenu();
 void nine_eleven();
-void displayCustomerProfile(Customer *cust);
-void applyDiscount(Customer *cust);
 void printBill(Customer *cust);
 
 int main() {
@@ -38,7 +36,7 @@ int main() {
         scanf("%d", &option);
 
         switch (option) {
-            case 1:
+            case 2:
                 if (customerCount < MAX_CUSTOMERS) {
                     readDetails(&customers[customerCount]);
                     customers[customerCount].totalBill = calculateBill(&customers[customerCount]);
@@ -47,7 +45,7 @@ int main() {
                     printf("Max customer limit reached!\n");
                 }
                 break;
-            case 2:
+            case 1:
                 nine_eleven();
                 break;
 
@@ -80,62 +78,46 @@ int main() {
 void displayMenu() {
     printf("\n\t  Empire State of Mind");
     printf("\n----- Hotel Management Menu -----\n");
-    printf("1. Add Customer Details\n");
-    printf("2. Hotel Rooms info\n");
+    printf("1. Hotel Rooms info\n");
+    printf("2. Add Customer Details\n");
     printf("3. Search Customer by Name\n");
     printf("4. Display All Bills\n");
     printf("5. Show Total Amount Received\n");
     printf("6. Exit\n");
 }
 
-
-
+// Function to display hotel room info
 void nine_eleven() {
     printf("Types of Rooms in the Hotel and Their Details:\n");
 
     printf("\n1. Single Room (S):\n");
     printf("   - Description: A room with a single bed meant for one person.\n");
-    printf("   - Size: 12-18 square meters\n");
-    printf("   - Facilities: Single bed, basic amenities, attached bathroom\n");
     printf("   - Price: 7,500\n");
 
     printf("\n2. Double Room (D):\n");
     printf("   - Description: A room with one large bed or two single beds for two people.\n");
-    printf("   - Size: 20-25 square meters\n");
-    printf("   - Facilities: Queen/King-size bed or two twin beds, basic amenities, AC\n");
     printf("   - Price: 15,000\n");
 
-    printf("\n3. Twin Room(T):\n");
+    printf("\n3. Twin Room (T):\n");
     printf("   - Description: A room with two separate beds meant for two people.\n");
-    printf("   - Size: 20-25 square meters\n");
-    printf("   - Facilities: Two twin-size beds, attached bathroom, AC\n");
     printf("   - Price: 15,000\n");
 
-    printf("\n4. Suite(U):\n");
+    printf("\n4. Suite (U):\n");
     printf("   - Description: A large room with a separate living area, designed for luxurious stays.\n");
-    printf("   - Size: 50-100 square meters\n");
-    printf("   - Facilities: King-size bed, separate living area, high-end amenities, bathtub/jacuzzi\n");
     printf("   - Price: 30,000\n");
 
-    printf("\n5. Executive Room(E):\n");
+    printf("\n5. Executive Room (E):\n");
     printf("   - Description: A premium room located on a higher floor with additional amenities.\n");
-    printf("   - Size: 25-35 square meters\n");
-    printf("   - Facilities: King-size bed, workspace, minibar, premium toiletries, AC\n");
     printf("   - Price: 40,000\n");
 
-    printf("\n6. Deluxe Room(X):\n");
+    printf("\n6. Deluxe Room (X):\n");
     printf("   - Description: A larger and more luxurious room than standard doubles.\n");
-    printf("   - Size: 30-45 square meters\n");
-    printf("   - Facilities: Luxury bedding, larger bathroom, AC, flat-screen TV, minibar\n");
     printf("   - Price: 45,000\n");
 
-    printf("\n7. Presidential Suite(P):\n");
+    printf("\n7. Presidential Suite (P):\n");
     printf("   - Description: The most luxurious room, often occupying an entire floor.\n");
-    printf("   - Size: 100+ square meters\n");
-    printf("   - Facilities: Separate bedroom, living room, private office, high-end furniture, private butler service\n");
     printf("   - Price: 50,000\n");
 }
-
 
 // Function to read customer details
 void readDetails(Customer *cust) {
@@ -145,37 +127,39 @@ void readDetails(Customer *cust) {
     scanf("%s", cust->name);
     printf("Enter Age: ");
     scanf("%d", &cust->age);
+    printf("Enter Room Type (S, D, T, U, E, X, P): ");
+    scanf(" %c", &cust->roomType);  // note the space before %c to avoid newline issues
     printf("Enter Number of Nights of Stay: ");
     scanf("%d", &cust->duration);
 }
 
-
 // Function to calculate the bill
 float calculateBill(Customer *cust) {
-    float roomRate;
+    float roomRate = 0;
     float totalBill;
     float gst;
 
-    // Assign room rates based on room type and AC
-    if (cust->roomType == 'S'){
+    // Assign room rates based on room type
+    if (cust->roomType == 'S') {
         roomRate = 7500;
-    } else if (cust->roomType == 'D' ) {
+    } else if (cust->roomType == 'D') {
         roomRate = 15000;
     } else if (cust->roomType == 'T') {
         roomRate = 15000;
     } else if (cust->roomType == 'U') {
         roomRate = 30000;
-    }else if (cust->roomType == 'E') {
+    } else if (cust->roomType == 'E') {
         roomRate = 40000;
-    }else if (cust->roomType == 'X') {
-        roomRate = 45000; 
-    }else if (cust->roomType == 'P') {
-        roomRate = 50000;    
+    } else if (cust->roomType == 'X') {
+        roomRate = 45000;
+    } else if (cust->roomType == 'P') {
+        roomRate = 50000;
+    }
 
     // Calculate total room rent
     totalBill = roomRate * cust->duration;
 
-
+    // Add GST (15%)
     gst = 0.15 * totalBill;
     totalBill += gst;
 
@@ -190,6 +174,7 @@ void printDetails(Customer *cust) {
     printf("Customer ID: %d\n", cust->customerId);
     printf("Name: %s\n", cust->name);
     printf("Age: %d\n", cust->age);
+    printf("Room Type: %c\n", cust->roomType);
     printf("Duration of Stay: %d\n", cust->duration);
     printf("Total Bill: %.2f\n", cust->totalBill);
 }
