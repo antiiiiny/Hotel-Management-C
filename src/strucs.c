@@ -128,7 +128,7 @@ void readDetails(Customer *cust) {
     printf("Enter Age: ");
     scanf("%d", &cust->age);
     printf("Enter Room Type (S, D, T, U, E, X, P): ");
-    scanf(" %c", &cust->roomType);  // note the space before %c to avoid newline issues
+    scanf(" %c", &cust->roomType);
     printf("Enter Number of Nights of Stay: ");
     scanf("%d", &cust->duration);
 }
